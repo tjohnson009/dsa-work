@@ -1,4 +1,3 @@
-debugger; 
 function mergeSort(array) {
     const isSorted = (arr) => {
         return arr.every((currentElement, index) => {
