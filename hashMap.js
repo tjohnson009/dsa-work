@@ -66,12 +66,59 @@ class HashMap {
         }
     }
 
-    get(key) {
+    get(key) { // get the value that matches a certain key
       let bucket = this.findBucket(key).bucket; 
       if (bucket.length === 0) {
         return null
       }
-      return bucket[0].value; 
+      for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i].key === key) {
+          return bucket[i].value; 
+        }
+      }
+      return null; 
+    }
+
+    has(key) {
+      let bucket = this.findBucket(key).bucket;
+      if (bucket.length === 0) {
+        return false; 
+      }
+      for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i].key === key) {
+          return true; 
+        }
+      }
+      return false; 
+    }
+
+    remove(key) {
+      let bucket = this.findBucket(key).bucket;
+      if (bucket.length === 0) {
+        return false; 
+      }
+      for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i].key === key) {
+          bucket.splice(i, 1); 
+          return true; 
+        }
+      }
+      return false;
+    }
+
+    length() {
+      return this.buckets.reduce((acc, bucket) => {
+        if (bucket.length > 0) {
+          acc += bucket.length; 
+        }
+        return acc; 
+      }, 0); 
+    }
+
+    clear() {
+      return this.buckets.forEach(bucket => {
+        bucket.splice(0, bucket.length); 
+      })
     }
 
     growBuckets() {
