@@ -121,6 +121,24 @@ class HashMap {
       })
     }
 
+    keys() {
+      return this.buckets.reduce((acc, bucket) => {
+          for(const entry of bucket) {
+            acc.push(entry.key)
+          }
+        return acc
+      }, [])
+    }
+
+    values() {
+      return this.buckets.reduce((acc, bucket) => {
+        for(const entry of bucket) {
+          acc.push(entry.value)
+        }
+      return acc
+    }, [])
+    }
+
     growBuckets() {
       // when load factor equals .75
       // do this to double the size of buckets
