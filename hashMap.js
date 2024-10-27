@@ -72,6 +72,9 @@ class HashMap {
         return null
       }
       for (let i = 0; i < bucket.length; i++) {
+        if (i < 0 || i >= buckets.length) {
+          throw new Error("Trying to access index out of bound");
+        }
         if (bucket[i].key === key) {
           return bucket[i].value; 
         }
@@ -86,6 +89,9 @@ class HashMap {
       }
       for (let i = 0; i < bucket.length; i++) {
         if (bucket[i].key === key) {
+          if (i < 0 || i >= buckets.length) {
+            throw new Error("Trying to access index out of bounds");
+          }
           return true; 
         }
       }
@@ -98,6 +104,9 @@ class HashMap {
         return false; 
       }
       for (let i = 0; i < bucket.length; i++) {
+        if (i < 0 || i >= buckets.length) {
+          throw new Error("Trying to access index out of bounds");
+        }
         if (bucket[i].key === key) {
           bucket.splice(i, 1); 
           return true; 
@@ -132,8 +141,17 @@ class HashMap {
 
     values() {
       return this.buckets.reduce((acc, bucket) => {
-        for(const entry of bucket) {
+        for (const entry of bucket) {
           acc.push(entry.value)
+        }
+      return acc
+    }, [])
+    }
+
+    entries() {
+      return this.buckets.reduce((acc, bucket) => {
+        for (const entry of bucket) {
+          acc.push([entry.key, entry.value]); 
         }
       return acc
     }, [])
