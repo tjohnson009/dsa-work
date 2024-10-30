@@ -15,11 +15,15 @@ test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden'); 
 
-console.log('BEFORE OVERWRITE', test.entries())
+// console.log('Entries BEFORE', test.entries()); 
+console.log('BUCKETS BEFORE OVERWRITE', test.buckets, test.length()); 
 
 // ------- load factor
 
 test.set('apple', 'OVERWRITTEN SUCCESSFULLY'); 
 test.set('banana', 'OVERWRITTEN'); 
+test.set('moon', 'silver'); 
 
-console.log('AFTER OVERWRITE', test.entries()); 
+
+console.log('Entries AFTER OVERWRITE', test.entries()); 
+console.log('BUCKETS AFTER OVERWRITE', test.buckets, test.length()); 

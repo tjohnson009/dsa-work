@@ -22,14 +22,16 @@ export default class HashMap {
               } else { // << 
                 hashCode ^= (hashCode << (shiftAmount)) ^ (key.charCodeAt(i)); 
                 hashCode = (prime * hashCode);
+                // hashCode = 31 * hashCode; 
               }
 
               if (shiftAmount === 1) {
                 shiftDirection = 1; // change shift direction
                 shiftAmount++; // implement proper shift for next cycle
               } else if (shiftAmount === MAX_SHIFT) {
-                shiftDirection = -1; 
-                shiftAmount--; 
+                // shiftDirection = -1; 
+                // shiftAmount--; 
+                shiftAmount = 1; 
               } else {
                 // add shiftDirection to shift?
                 shiftAmount += shiftDirection; 
@@ -37,19 +39,33 @@ export default class HashMap {
             }
             // keep it in 32 bit please
             return Math.abs(hashCode & 0xFFFFFFFF);
+            // return hashCode >>> 0;
+    } 
+
+    hash2(key) { // generates a hash code
+      let hashCode = 0;
+      
+      const primeNumber = 31;
+      for (let i = 0; i < key.length; i++) {
+        hashCode = primeNumber * hashCode + key.charCodeAt(i);
+      }
+   
+      return hashCode;
     } 
 
     findBucket(key) {
         let hashCode = this.hash(key); 
+        // let hashCode = this.hash2(key); 
         // return {
         //   bucket: this.buckets[hashCode % this.buckets.length], // returns an array from within our buckets array
         //   hashCode: hashCode
         // }
-        console.log(`${hashCode}`, this.buckets[hashCode % this.buckets.length]); 
+        console.log(`${key} : ${hashCode} : ${hashCode % this.buckets.length}`, this.buckets[hashCode % this.buckets.length]); 
         return this.buckets[hashCode % this.buckets.length]; 
     }
 
     set(key, value) {
+      // console.log('map', this.entries()); 
         let bucket = this.findBucket(key); // ==> array
         // let bucket = this.findBucket(key).bucket; // ==> array
         console.log(`setting ${key}:${value} in bucket`, bucket); 
@@ -57,20 +73,20 @@ export default class HashMap {
 
         // this.buckets[bucket] - if the key matches, update. if the key doesn't match - collision. if nothing, insert and set
 
-        for (const entry of bucket) { // not iterable if empty???
+        for (const entry of bucket) { // if there is something in the bucket - check if theres a matching key
             if (entry.key === key) { // updating the key and value because key already exists
                 entry.value = value; 
-                return
+                return // exits out of the function to avoid pushing duplicates
             }
+          }
             bucket.push({key: key, value: value}) // { key, value }
-            if ((this.length() / this.buckets.length) >= .75) {
+            if ((this.length() / this.buckets.length) > .75) {
               this.growBuckets(); 
             }
-        }
     }
 
     get(key) { // get the value that matches a certain key
-      let bucket = this.findBucket(key).bucket; 
+      let bucket = this.findBucket(key); 
       if (bucket.length === 0) {
         return null
       }
@@ -86,7 +102,7 @@ export default class HashMap {
     }
 
     has(key) {
-      let bucket = this.findBucket(key).bucket;
+      let bucket = this.findBucket(key);
       if (bucket.length === 0) {
         return false; 
       }
@@ -102,7 +118,7 @@ export default class HashMap {
     }
 
     remove(key) {
-      let bucket = this.findBucket(key).bucket;
+      let bucket = this.findBucket(key);
       if (bucket.length === 0) {
         return false; 
       }
@@ -175,7 +191,7 @@ export default class HashMap {
         for (let i = 0; i < keys.length; i++) { 
         // for (let i = 0; i < entries.length; i++) { 
           // hash it 
-          let bucket = this.findBucket(keys[i]).bucket; 
+          let bucket = this.findBucket(keys[i]); 
           // let bucket = this.findBucket(entries[i].key).bucket; 
           // place the key in the bucket and the value in the bucket
           bucket.push({ key: keys[i], value: values[i] }) // { key, value }
