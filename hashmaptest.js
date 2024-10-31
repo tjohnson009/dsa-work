@@ -27,3 +27,13 @@ test.set('moon', 'silver');
 
 console.log('Entries AFTER OVERWRITE', test.entries()); 
 console.log('BUCKETS AFTER OVERWRITE', test.buckets, test.length()); 
+
+test.get('apple'); 
+console.log(test.has('cheeks')); 
+test.remove('apple'); 
+console.log(test.length());
+console.log(test.keys());
+console.log(test.values()); 
+console.log(test.entries()); 
+test.clear(); 
+console.log(test.entries()); 

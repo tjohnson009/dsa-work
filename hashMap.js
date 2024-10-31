@@ -22,7 +22,6 @@ export default class HashMap {
               } else { // << 
                 hashCode ^= (hashCode << (shiftAmount)) ^ (key.charCodeAt(i)); 
                 hashCode = (prime * hashCode);
-                // hashCode = 31 * hashCode; 
               }
 
               if (shiftAmount === 1) {
@@ -38,6 +37,7 @@ export default class HashMap {
               }
             }
             // keep it in 32 bit please
+            // return hashCode & 0xFFFFFFFF;
             return Math.abs(hashCode & 0xFFFFFFFF);
             // return hashCode >>> 0;
     } 
@@ -91,7 +91,7 @@ export default class HashMap {
         return null
       }
       for (let i = 0; i < bucket.length; i++) {
-        if (i < 0 || i >= buckets.length) {
+        if (i < 0 || i >= this.buckets.length) {
           throw new Error("Trying to access index out of bound");
         }
         if (bucket[i].key === key) {
@@ -108,7 +108,7 @@ export default class HashMap {
       }
       for (let i = 0; i < bucket.length; i++) {
         if (bucket[i].key === key) {
-          if (i < 0 || i >= buckets.length) {
+          if (i < 0 || i >= this.buckets.length) {
             throw new Error("Trying to access index out of bounds");
           }
           return true; 
@@ -123,7 +123,7 @@ export default class HashMap {
         return false; 
       }
       for (let i = 0; i < bucket.length; i++) {
-        if (i < 0 || i >= buckets.length) {
+        if (i < 0 || i >= this.buckets.length) {
           throw new Error("Trying to access index out of bounds");
         }
         if (bucket[i].key === key) {
